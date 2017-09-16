@@ -17,6 +17,8 @@
         [Index("Product_Description_Index", IsUnique = true)]
         public string Description  { get; set; }
 
+        public string Image { get; set; }
+
         [Required(ErrorMessage = "The field {0} is required.")]
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
         public decimal Price { get; set; }
