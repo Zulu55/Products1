@@ -210,7 +210,20 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\antioqueño-750-sin-azucar.gif" />
+    <Content Include="Content\Images\antioqueño-litro-sin-azucar.gif.png" />
+    <Content Include="Content\Images\Avana_Canela.jpg" />
+    <Content Include="Content\Images\baby_doll.png" />
+    <Content Include="Content\Images\Disolvente.png" />
+    <Content Include="Content\Images\Flexometro.gif" />
+    <Content Include="Content\Images\Garrafa-de-Aguardiente-Antioqueño.png" />
+    <Content Include="Content\Images\Martillo.png" />
+    <Content Include="Content\Images\Queso_Colanta.jpg" />
+    <Content Include="Content\Images\Queso_de_barra.png" />
+    <Content Include="Content\Images\Ron_Medellin_Media.png" />
     <Content Include="Content\Images\tanga_tigre.jpg" />
+    <Content Include="Content\Images\Tequila_Jose_Cuervo.gif" />
+    <Content Include="Content\Images\Yogut_Alpina.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

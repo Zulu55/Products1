@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="Products1.Views.ProductsView" 
+    BindingContext="{Binding Main, Source={StaticResource Locator}}" 
+    Title="Products">
+	<ContentPage.Content>
+        <StackLayout 
+            BindingContext="{Binding Products}" 
+            Padding="5">
+            <ListView 
+                HasUnevenRows="true" 
+                ItemsSource="{Binding Products}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Image
+                                    Grid.Column="0"
+                                    HeightRequest="100"
+                                    HorizontalOptions="Start"
+                                    Source="{Binding ImageFullPath}"
+                                    WidthRequest="100">
+                                </Image>
+                                <Label 
+                                    Grid.Column="1" 
+                                    HorizontalOptions="FillAndExpand" 
+                                    FontSize="Medium" 
+                                    Text="{Binding Description}" 
+                                    VerticalOptions="Center">
+                                </Label>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+	</ContentPage.Content>
+</ContentPage>

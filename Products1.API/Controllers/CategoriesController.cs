@@ -1,5 +1,8 @@
 ﻿namespace Products1.API.Controllers
 {
+    using Domain;
+    using Models;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     using System.Linq;
@@ -7,7 +10,6 @@
     using System.Threading.Tasks;
     using System.Web.Http;
     using System.Web.Http.Description;
-    using Products1.Domain;
 
     [Authorize]
     public class CategoriesController : ApiController
@@ -15,9 +17,38 @@
         private DataContext db = new DataContext();
 
         // GET: api/Categories
-        public IQueryable<Category> GetCategories()
+        public async Task<IHttpActionResult> GetCategories()
         {
-            return db.Categories;
+            var categories = await db.Categories.ToListAsync();
+            var categoriesResponse = new List<CategoryResponse>();
+
+            foreach (var category in categories)
+            {
+                var productsResponse = new List<ProductResponse>();
+                foreach (var product in category.Products)
+                {
+                    productsResponse.Add(new ProductResponse
+                    {
+                        Description = product.Description,
+                        Image = product.Image,
+                        IsActive = product.IsActive,
+                        LastPurchase = product.LastPurchase,
+                        Price = product.Price,
+                        ProductId = product.ProductId,
+                        Remarks = product.Remarks,
+                        Stock = product.Stock,
+                    });
+                }
+
+                categoriesResponse.Add(new CategoryResponse
+                {
+                    CategoryId = category.CategoryId,
+                    Description = category.Description,
+                    Products = productsResponse,
+                });
+            }
+
+            return Ok(categoriesResponse);
         }
 
         // GET: api/Categories/5
