@@ -115,6 +115,7 @@
     <BundleResource Include="Resources\Icon-Small%403x.png" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
     <BundleResource Include="Resources\ic_chevron_right.png" />
+    <BundleResource Include="Resources\ic_add_circle.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
