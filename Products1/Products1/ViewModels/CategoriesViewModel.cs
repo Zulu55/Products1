@@ -21,6 +21,7 @@
         #region Attributes
         List<Category> categories;
         ObservableCollection<Category> _categories;
+        List <Category> categories;
         #endregion
 
         #region Properties
