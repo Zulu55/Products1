@@ -1,11 +1,19 @@
 ﻿namespace Products1.ViewModels
 {
+    using System;
+    using System.Windows.Input;
+    using GalaSoft.MvvmLight.Command;
     using Models;
+    using Services;
 
     public class MainViewModel
     {
-        #region Properties
-        public LoginViewModel Login
+        #region Services
+        NavigationService navigationService;
+		#endregion
+
+		#region Properties
+		public LoginViewModel Login
         {
             get;
             set;
@@ -29,12 +37,20 @@
             get;
             set;
         }
+
+        public NewCategoryViewModel NewCategory
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Constructors
         public MainViewModel()
         {
             instance = this;
+
+            navigationService = new NavigationService();
 
             Login = new LoginViewModel();
         }
@@ -51,6 +67,22 @@
             }
 
             return instance;
+        }
+        #endregion
+
+        #region Commands
+        public ICommand NewCategoryCommand
+        {
+            get
+            {
+                return new RelayCommand(GoNewCategory);
+            }
+        }
+
+        async void GoNewCategory()
+        {
+            NewCategory = new NewCategoryViewModel(); 
+            await navigationService.Navigate("NewCategoryView");
         }
         #endregion
     }
