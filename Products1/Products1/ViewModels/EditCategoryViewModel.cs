@@ -1,13 +1,13 @@
 ﻿namespace Products1.ViewModels
 {
-    using System.ComponentModel;
-    using System.Windows.Input;
-    using GalaSoft.MvvmLight.Command;
-    using Models;
-    using Services;
-
-    public class NewCategoryViewModel : INotifyPropertyChanged
-	{
+	using System.ComponentModel;
+	using System.Windows.Input;
+	using GalaSoft.MvvmLight.Command;
+	using Models;
+	using Services;
+	
+    public class EditCategoryViewModel : INotifyPropertyChanged
+    {
 		#region Events
 		public event PropertyChangedEventHandler PropertyChanged;
 		#endregion
@@ -21,6 +21,7 @@
 		#region Attributes
 		bool _isRunning;
 		bool _isEnabled;
+        Category category;
 		#endregion
 
 		#region Properties
@@ -60,45 +61,49 @@
 			}
 		}
 
-        public string Description
-        {
-            get;
-            set;
-        }
+		public string Description
+		{
+			get;
+			set;
+		}
 		#endregion
 
 		#region Constructors
-		public NewCategoryViewModel()
+		public EditCategoryViewModel(Category category)
 		{
+            this.category = category;
+
 			apiService = new ApiService();
 			dialogService = new DialogService();
 			navigationService = new NavigationService();
 
+            Description = category.Description;
+
 			IsEnabled = true;
 		}
-        #endregion
+		#endregion
 
-        #region Commands
-        public ICommand SaveCommand
-        {
-            get
-            {
-                return new RelayCommand(Save);
-            }
-        }
+		#region Commands
+		public ICommand SaveCommand
+		{
+			get
+			{
+				return new RelayCommand(Save);
+			}
+		}
 
-        async void Save()
-        {
-            if (string.IsNullOrEmpty(Description))
-            {
-                await dialogService.ShowMessage(
-                    "Error", 
-                    "You must enter a category description.");
-                return;
-            }
+		async void Save()
+		{
+			if (string.IsNullOrEmpty(Description))
+			{
+				await dialogService.ShowMessage(
+					"Error",
+					"You must enter a category description.");
+				return;
+			}
 
-            IsRunning = true;
-            IsEnabled = false;
+			IsRunning = true;
+			IsEnabled = false;
 
 			var connection = await apiService.CheckConnection();
 			if (!connection.IsSuccess)
@@ -109,20 +114,17 @@
 				return;
 			}
 
-            var category = new Category
-            {
-                Description = Description,
-            };
+            category.Description = Description;
 
-            var mainViewModel = MainViewModel.GetInstance();
+			var mainViewModel = MainViewModel.GetInstance();
 
-			var response = await apiService.Post(
+            var response = await apiService.Put(
 				"http://productszuluapi.azurewebsites.net",
 				"/api",
 				"/Categories",
-                mainViewModel.Token.TokenType,
-                mainViewModel.Token.AccessToken,
-                category);
+				mainViewModel.Token.TokenType,
+				mainViewModel.Token.AccessToken,
+				category);
 
 			if (!response.IsSuccess)
 			{
@@ -134,15 +136,14 @@
 				return;
 			}
 
-            category = (Category)response.Result;
-            var categoriesViewModel = CategoriesViewModel.GetInstance();
-            categoriesViewModel.AddCategory(category);
+			var categoriesViewModel = CategoriesViewModel.GetInstance();
+			categoriesViewModel.UpdateCategory(category);
 
-            await navigationService.Back();
+			await navigationService.Back();
 
 			IsRunning = false;
 			IsEnabled = true;
 		}
-        #endregion
-    }
+		#endregion
+	}
 }

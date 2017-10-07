@@ -8,12 +8,13 @@
 
     public class Category
     {
-        #region Services
-        NavigationService navigationService;
-        #endregion
+		#region Services
+        DialogService dialogService;
+		NavigationService navigationService;
+		#endregion
 
-        #region Properties
-        public int CategoryId { get; set; }
+		#region Properties
+		public int CategoryId { get; set; }
 
         public string Description { get; set; }
 
@@ -23,11 +24,55 @@
         #region Constructors
         public Category()
         {
+            dialogService = new DialogService();
             navigationService = new NavigationService();
         }
         #endregion
 
+        #region Methods
+        public override int GetHashCode()
+        {
+            return CategoryId;
+        }
+        #endregion
+
         #region Commands
+        public ICommand DeleteCommand
+        {
+			get
+			{
+				return new RelayCommand(Delete);
+			}
+		}
+
+        async void Delete()
+        {
+            var response = await dialogService.ShowConfirm(
+                "Confirm", 
+                "Are you sure to delete this record?");
+            if (!response)
+            {
+                return;    
+            }
+
+            await CategoriesViewModel.GetInstance().DeleteCategory(this);
+        }
+
+        public ICommand EditCommand
+        {
+			get
+			{
+				return new RelayCommand(Edit);
+			}
+		}
+
+        async void Edit()
+        {
+            MainViewModel.GetInstance().EditCategory = 
+                new EditCategoryViewModel(this);
+            await navigationService.Navigate("EditCategoryView");
+        }
+
         public ICommand SelectCategoryCommand
         {
             get

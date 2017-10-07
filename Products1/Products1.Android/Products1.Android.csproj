@@ -17,7 +17,7 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
     <JavaMaximumHeapSize />
@@ -121,6 +121,7 @@
     <AndroidResource Include="Resources\drawable-hdpi\ic_add_circle.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\ic_add_circle.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\ic_add_circle.png" />
+    <AndroidResource Include="Resources\drawable\ic_action_add_circle.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

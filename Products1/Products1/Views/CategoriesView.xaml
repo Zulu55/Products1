@@ -9,19 +9,33 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem 
             Command="{Binding NewCategoryCommand}"
-            Icon="ic_add_circle"/>
+            Icon="ic_action_add_circle"/>
     </ContentPage.ToolbarItems>
     
     <ContentPage.Content>
-        <StackLayout 
+        <StackLayout            
             BindingContext="{Binding Categories}" 
             Padding="5">
-            <ListView 
+            <ListView
                 HasUnevenRows="true" 
-                ItemsSource="{Binding CategoriesList}">
+                IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}"
+                IsPullToRefreshEnabled="true"
+                ItemsSource="{Binding CategoriesList}"
+                RefreshCommand="{Binding RefreshCommand}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem 
+                                    Command="{Binding EditCommand}" 
+                                    Text="Edit">
+                                </MenuItem>
+                                <MenuItem 
+                                    Command="{Binding DeleteCommand}" 
+                                    IsDestructive="true"     
+                                    Text="Delete">
+                                </MenuItem>
+                            </ViewCell.ContextActions>                              
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
