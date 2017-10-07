@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="Products1.Views.ProductsView" 
     BindingContext="{Binding Main, Source={StaticResource Locator}}" 
-    Title="Products">
+    Title="{Binding Category.Description}">
 	<ContentPage.Content>
         <StackLayout 
             BindingContext="{Binding Products}" 

@@ -49,6 +49,12 @@
             get;
             set;
         }
+
+        public Category Category
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Constructors
