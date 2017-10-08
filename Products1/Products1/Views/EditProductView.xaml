@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="Products1.Views.EditProductView"
+    BindingContext="{Binding Main, Source={StaticResource Locator}}"
+    Title="Edit Product">
+    <ContentPage.Content>
+        <ScrollView
+            BindingContext="{Binding EditProduct}">
+            <StackLayout
+                Padding="10">
+
+                <Label
+                    Text="Product:">
+                </Label>
+                <Entry
+                    Text="{Binding Description, Mode=TwoWay}"
+                    Placeholder="Enter product description...">
+                </Entry>
+
+                <Label
+                    Text="Price:">
+                </Label>
+                <Entry
+                    Keyboard="Numeric"
+                    Text="{Binding Price, Mode=TwoWay}"
+                    Placeholder="Enter product price...">
+                </Entry>
+
+                <StackLayout
+                    Orientation="Horizontal">
+                    <Label
+                        HorizontalOptions="StartAndExpand"
+                        Text="Is Active?"
+                        VerticalOptions="Center">
+                    </Label>
+                    <Switch
+                        HorizontalOptions="End"
+                        IsToggled="{Binding IsActive, Mode=TwoWay}"
+                        VerticalOptions="Center">
+                    </Switch>
+                </StackLayout>
+
+                <Label
+                    Text="Last purchase:">
+                </Label>
+                <DatePicker
+                    Date="{Binding LastPurchase, Mode=TwoWay}">
+                </DatePicker>
+
+                <Label
+                    Text="Stock:">
+                </Label>
+                <Entry
+                    Keyboard="Numeric"
+                    Text="{Binding Stock, Mode=TwoWay}"
+                    Placeholder="Enter product stock...">
+                </Entry>
+
+                <Label
+                    Text="Remarks:">
+                </Label>
+                <Entry
+                    Text="{Binding Remarks, Mode=TwoWay}">
+                </Entry>
+
+                <Image
+                    HeightRequest="200"
+                    Source="{Binding Image, Mode=TwoWay}"
+                    WidthRequest="200">
+                </Image>
+
+                <ActivityIndicator
+                    IsRunning="{Binding IsRunning, Mode=TwoWay}"
+                    VerticalOptions="CenterAndExpand">
+                </ActivityIndicator>
+                
+                <Button
+                    Command="{Binding SaveCommand}"
+                    BackgroundColor="Navy"
+                    BorderRadius="23"
+                    FontAttributes="Bold"
+                    HeightRequest="46"
+                    IsEnabled="{Binding IsEnabled, Mode=TwoWay}"
+                    Margin="50,0"
+                    Text="Save"
+                    TextColor="White"
+                    VerticalOptions="EndAndExpand">
+                </Button>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
+
