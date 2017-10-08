@@ -30,6 +30,7 @@
                 {
                     productsResponse.Add(new ProductResponse
                     {
+                        CategoryId = product.CategoryId,
                         Description = product.Description,
                         Image = product.Image,
                         IsActive = product.IsActive,
@@ -85,15 +86,17 @@
             {
                 await db.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!CategoryExists(id))
+                if (ex.InnerException != null &&
+                    ex.InnerException.InnerException != null &&
+                    ex.InnerException.InnerException.Message.Contains("Index"))
                 {
-                    return NotFound();
+                    return BadRequest("There are a record with the same description.");
                 }
                 else
                 {
-                    throw;
+                    return BadRequest(ex.Message);
                 }
             }
 
@@ -142,7 +145,23 @@
             }
 
             db.Categories.Remove(category);
-            await db.SaveChangesAsync();
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null &&
+                    ex.InnerException.InnerException != null &&
+                    ex.InnerException.InnerException.Message.Contains("REFERENCE"))
+                {
+                    return BadRequest("You can't delete this record, becase it has related record.");
+                }
+                else
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
 
             return Ok(category);
         }

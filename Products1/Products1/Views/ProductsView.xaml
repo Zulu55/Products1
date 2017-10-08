@@ -5,16 +5,35 @@
     x:Class="Products1.Views.ProductsView" 
     BindingContext="{Binding Main, Source={StaticResource Locator}}" 
     Title="{Binding Category.Description}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem 
+            Command="{Binding NewProductCommand}"
+            Icon="ic_action_add_circle"/>
+    </ContentPage.ToolbarItems>
+    
 	<ContentPage.Content>
         <StackLayout 
             BindingContext="{Binding Products}" 
             Padding="5">
             <ListView 
                 HasUnevenRows="true" 
+                IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}"
                 ItemsSource="{Binding Products}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem 
+                                    Command="{Binding EditCommand}" 
+                                    Text="Edit">
+                                </MenuItem>
+                                <MenuItem 
+                                    Command="{Binding DeleteCommand}" 
+                                    IsDestructive="true"     
+                                    Text="Delete">
+                                </MenuItem>
+                            </ViewCell.ContextActions>  
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>

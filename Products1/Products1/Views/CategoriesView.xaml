@@ -13,14 +13,14 @@
     </ContentPage.ToolbarItems>
     
     <ContentPage.Content>
-        <StackLayout            
+        <StackLayout 
             BindingContext="{Binding Categories}" 
             Padding="5">
-            <ListView
+            <ListView 
                 HasUnevenRows="true" 
-                IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}"
                 IsPullToRefreshEnabled="true"
-                ItemsSource="{Binding CategoriesList}"
+                IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}"
+                ItemsSource="{Binding Categories}"
                 RefreshCommand="{Binding RefreshCommand}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -35,7 +35,7 @@
                                     IsDestructive="true"     
                                     Text="Delete">
                                 </MenuItem>
-                            </ViewCell.ContextActions>                              
+                            </ViewCell.ContextActions>  
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>

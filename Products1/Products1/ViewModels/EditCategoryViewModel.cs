@@ -1,12 +1,13 @@
 ﻿namespace Products1.ViewModels
 {
+	using System;
 	using System.ComponentModel;
 	using System.Windows.Input;
 	using GalaSoft.MvvmLight.Command;
 	using Models;
 	using Services;
-	
-    public class EditCategoryViewModel : INotifyPropertyChanged
+
+	public class EditCategoryViewModel : INotifyPropertyChanged
     {
 		#region Events
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -21,7 +22,7 @@
 		#region Attributes
 		bool _isRunning;
 		bool _isEnabled;
-        Category category;
+		Category category;
 		#endregion
 
 		#region Properties
@@ -70,7 +71,7 @@
 
 		#region Constructors
 		public EditCategoryViewModel(Category category)
-		{
+        {
             this.category = category;
 
 			apiService = new ApiService();
@@ -115,10 +116,9 @@
 			}
 
             category.Description = Description;
-
 			var mainViewModel = MainViewModel.GetInstance();
 
-            var response = await apiService.Put(
+			var response = await apiService.Put(
 				"http://productszuluapi.azurewebsites.net",
 				"/api",
 				"/Categories",
@@ -137,7 +137,7 @@
 			}
 
 			var categoriesViewModel = CategoriesViewModel.GetInstance();
-			categoriesViewModel.UpdateCategory(category);
+			categoriesViewModel.Update(category);
 
 			await navigationService.Back();
 

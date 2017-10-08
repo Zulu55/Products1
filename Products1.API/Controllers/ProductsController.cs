@@ -1,13 +1,16 @@
 ﻿namespace Products1.API.Controllers
 {
+    using Domain;
+    using Helpers;
+    using Models;
+    using System;
     using System.Data.Entity;
-    using System.Data.Entity.Infrastructure;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
     using System.Web.Http;
     using System.Web.Http.Description;
-    using Products1.Domain;
 
     [Authorize]
     public class ProductsController : ApiController
@@ -35,52 +38,119 @@
 
         // PUT: api/Products/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutProduct(int id, Product product)
+        public async Task<IHttpActionResult> PutProduct(int id, ProductRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != product.ProductId)
+            if (id != request.ProductId)
             {
                 return BadRequest();
             }
 
+            if (request.ImageArray != null && request.ImageArray.Length > 0)
+            {
+                var stream = new MemoryStream(request.ImageArray);
+                var guid = Guid.NewGuid().ToString();
+                var file = string.Format("{0}.jpg", guid);
+                var folder = "~/Content/Images";
+                var fullPath = string.Format("{0}/{1}", folder, file);
+                var response = FilesHelper.UploadPhoto(stream, folder, file);
+
+                if (response)
+                {
+                    request.Image = fullPath;
+                }
+            }
+
+            var product = ToProduct(request);
             db.Entry(product).State = EntityState.Modified;
 
             try
             {
                 await db.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!ProductExists(id))
+                if (ex.InnerException != null &&
+                    ex.InnerException.InnerException != null &&
+                    ex.InnerException.InnerException.Message.Contains("Index"))
                 {
-                    return NotFound();
+                    return BadRequest("There are a record with the same description.");
                 }
                 else
                 {
-                    throw;
+                    return BadRequest(ex.Message);
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(product);
         }
 
         // POST: api/Products
         [ResponseType(typeof(Product))]
-        public async Task<IHttpActionResult> PostProduct(Product product)
+        public async Task<IHttpActionResult> PostProduct(ProductRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            if (request.ImageArray != null && request.ImageArray.Length > 0)
+            {
+                var stream = new MemoryStream(request.ImageArray);
+                var guid = Guid.NewGuid().ToString();
+                var file = string.Format("{0}.jpg", guid);
+                var folder = "~/Content/Images";
+                var fullPath = string.Format("{0}/{1}", folder, file);
+                var response = FilesHelper.UploadPhoto(stream, folder, file);
+
+                if (response)
+                {
+                    request.Image = fullPath;
+                }
+            }
+
+            var product = ToProduct(request);
             db.Products.Add(product);
-            await db.SaveChangesAsync();
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null &&
+                    ex.InnerException.InnerException != null &&
+                    ex.InnerException.InnerException.Message.Contains("Index"))
+                {
+                    return BadRequest("There are a record with the same description.");
+                }
+                else
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
 
             return CreatedAtRoute("DefaultApi", new { id = product.ProductId }, product);
+        }
+
+        private Product ToProduct(ProductRequest request)
+        {
+            return new Product
+            {
+                Category = request.Category,
+                CategoryId = request.CategoryId,
+                Description = request.Description,
+                Image = request.Image,
+                IsActive = request.IsActive,
+                LastPurchase = request.LastPurchase,
+                Price = request.Price,
+                ProductId = request.ProductId,
+                Remarks = request.Remarks,
+                Stock = request.Stock,
+            };
         }
 
         // DELETE: api/Products/5
@@ -94,7 +164,23 @@
             }
 
             db.Products.Remove(product);
-            await db.SaveChangesAsync();
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null &&
+                    ex.InnerException.InnerException != null &&
+                    ex.InnerException.InnerException.Message.Contains("REFERENCE"))
+                {
+                    return BadRequest("You can't delete this record, becase it has related record.");
+                }
+                else
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
 
             return Ok(product);
         }

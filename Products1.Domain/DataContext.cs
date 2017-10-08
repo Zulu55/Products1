@@ -9,12 +9,12 @@
         {
         }
 
-		protected override void OnModelCreating(DbModelBuilder modelBuilder)
-		{
-			modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-		}
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+        }
 
-		public DbSet<Category> Categories { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         public DbSet<Product> Products { get; set; }
     }

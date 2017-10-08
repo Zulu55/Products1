@@ -28,7 +28,7 @@
         #endregion
 
         #region Properties
-        public ObservableCollection<Category> CategoriesList
+        public ObservableCollection<Category> Categories
         {
             get
             {
@@ -41,13 +41,13 @@
                     _categories = value;
                     PropertyChanged?.Invoke(
                         this,
-                        new PropertyChangedEventArgs(nameof(CategoriesList)));
+                        new PropertyChangedEventArgs(nameof(Categories)));
                 }
             }
         }
 
-        public bool IsRefreshing
-        {
+		public bool IsRefreshing
+		{
 			get
 			{
 				return _isRefreshing;
@@ -63,10 +63,10 @@
 				}
 			}
 		}
-        #endregion
+		#endregion
 
-        #region Constructors
-        public CategoriesViewModel()
+		#region Constructors
+		public CategoriesViewModel()
         {
             instance = this;
 
@@ -92,29 +92,29 @@
 		#endregion
 
 		#region Methods
-		public void AddCategory(Category category)
+		public void Add(Category category)
 		{
 			IsRefreshing = true;
 			categories.Add(category);
-			CategoriesList = new ObservableCollection<Category>(
+			Categories = new ObservableCollection<Category>(
 				categories.OrderBy(c => c.Description));
-			IsRefreshing = false;
+            IsRefreshing = false;
 		}
 
-		public void UpdateCategory(Category category)
+		public void Update(Category category)
 		{
 			IsRefreshing = true;
-            var oldCategory = categories
+			var oldCategory = categories
                 .Where(c => c.CategoryId == category.CategoryId)
                 .FirstOrDefault();
             oldCategory = category;
-			CategoriesList = new ObservableCollection<Category>(
+			Categories = new ObservableCollection<Category>(
 				categories.OrderBy(c => c.Description));
 			IsRefreshing = false;
 		}
 
-        public async Task DeleteCategory(Category category)
-        {
+		public async Task Delete(Category category)
+		{
 			IsRefreshing = true;
 
 			var connection = await apiService.CheckConnection();
@@ -127,7 +127,7 @@
 
 			var mainViewModel = MainViewModel.GetInstance();
 
-			var response = await apiService.Delete(
+            var response = await apiService.Delete(
 				"http://productszuluapi.azurewebsites.net",
 				"/api",
 				"/Categories",
@@ -145,20 +145,19 @@
 			}
 
             categories.Remove(category);
-			CategoriesList = new ObservableCollection<Category>(
+			Categories = new ObservableCollection<Category>(
 				categories.OrderBy(c => c.Description));
-			IsRefreshing = false;
+
+            IsRefreshing = false;
 		}
 
 		async void LoadCategories()
         {
             IsRefreshing = true;
-
             var connection = await apiService.CheckConnection();
             if (!connection.IsSuccess)
             {
-                IsRefreshing = false;
-				await dialogService.ShowMessage(
+                await dialogService.ShowMessage(
                     "Error",
                     connection.Message);
                 return;
@@ -175,18 +174,17 @@
 
             if (!response.IsSuccess)
             {
-				IsRefreshing = false;
-				await dialogService.ShowMessage(
+                await dialogService.ShowMessage(
                     "Error",
                     response.Message);
                 return;
             }
 
             categories = (List<Category>)response.Result;
-            CategoriesList = new ObservableCollection<Category>(
+            Categories = new ObservableCollection<Category>(
                 categories.OrderBy(c => c.Description));
-			IsRefreshing = false;
-		}
+            IsRefreshing = false;
+        }
         #endregion
 
         #region Commands
@@ -198,5 +196,6 @@
             }
         }
         #endregion
+
     }
 }

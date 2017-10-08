@@ -52,10 +52,10 @@
                 "Are you sure to delete this record?");
             if (!response)
             {
-                return;    
+                return;
             }
 
-            await CategoriesViewModel.GetInstance().DeleteCategory(this);
+            await CategoriesViewModel.GetInstance().Delete(this);
         }
 
         public ICommand EditCommand
@@ -84,8 +84,8 @@
         async void SelectCategory()
         {
             var mainViewModel = MainViewModel.GetInstance();
-            mainViewModel.Category = this;
             mainViewModel.Products = new ProductsViewModel(Products);
+            mainViewModel.Category = this;
             await navigationService.Navigate("ProductsView");
         }
         #endregion
