@@ -1,16 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Xamarin.Forms;
-
-namespace Products1
+﻿namespace Products1
 {
     using Views;
+    using Xamarin.Forms;
 
     public partial class App : Application
     {
+        public static NavigationPage Navigator 
+        { 
+            get; 
+            internal set; 
+        }
+
+        public static MasterView Master 
+        { 
+            get; 
+            internal set; 
+        }
+
         public App()
         {
             InitializeComponent();

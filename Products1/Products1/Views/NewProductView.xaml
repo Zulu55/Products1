@@ -67,9 +67,18 @@
 
                 <Image
                     HeightRequest="200"
-                    Source="{Binding Image, Mode=TwoWay}"
+                    Source="{Binding ImageSource}"
                     WidthRequest="200">
-                </Image>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ChangeImageCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image> 
+
+                <Label
+                    FontSize="Small"
+                    HorizontalOptions="Center"
+                    Text="Tap on image to change it.">
+                </Label>
 
                 <ActivityIndicator
                     IsRunning="{Binding IsRunning, Mode=TwoWay}"

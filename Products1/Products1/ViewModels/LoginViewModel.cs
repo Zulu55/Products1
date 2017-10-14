@@ -133,7 +133,22 @@
         #endregion
 
         #region Commands
-        public ICommand LoginCommand
+        public ICommand RegisterNewUserCommand
+		{
+			get
+			{
+				return new RelayCommand(RegisterNewUser);
+			}
+		}
+
+		async void RegisterNewUser()
+		{
+			MainViewModel.GetInstance().NewCustomer = new NewCustomerViewModel();
+            await navigationService.NavigateOnLogin("NewCustomerView");
+		}
+
+
+		public ICommand LoginCommand
         {
             get
             {
@@ -201,7 +216,7 @@
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Token = response;
             mainViewModel.Categories = new CategoriesViewModel();
-            await navigationService.Navigate("CategoriesView");
+            navigationService.SetMainPage("MasterView");
 
             Email = null;
             Password = null;

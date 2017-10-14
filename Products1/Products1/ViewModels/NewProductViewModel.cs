@@ -4,9 +4,13 @@
     using System.ComponentModel;
 	using System.Windows.Input;
 	using GalaSoft.MvvmLight.Command;
+    using Helpers;
 	using Models;
-	using Services;
-	
+    using Plugin.Media;
+    using Plugin.Media.Abstractions;
+    using Services;
+    using Xamarin.Forms;
+
     public class NewProductViewModel : INotifyPropertyChanged
     {
 		#region Events
@@ -22,10 +26,30 @@
 		#region Attributes
 		bool _isRunning;
 		bool _isEnabled;
+        ImageSource _imageSource;
+		MediaFile file;
 		#endregion
 
 		#region Properties
-		public bool IsEnabled
+        public ImageSource ImageSource
+		{
+			set
+			{
+				if (_imageSource != value)
+				{
+					_imageSource = value;
+					PropertyChanged?.Invoke(
+						this,
+						new PropertyChangedEventArgs(nameof(ImageSource)));
+				}
+			}
+			get
+			{
+				return _imageSource;
+			}
+		}
+
+        public bool IsEnabled
 		{
 			get
 			{
@@ -111,7 +135,7 @@
 			dialogService = new DialogService();
 			navigationService = new NavigationService();
 
-            Image = "noimage";
+            ImageSource = "noimage";
             IsActive = true;
             LastPurchase = DateTime.Today;
 
@@ -120,6 +144,60 @@
 		#endregion
 
 		#region Commands
+        public ICommand ChangeImageCommand
+		{
+			get
+			{
+				return new RelayCommand(ChangeImage);
+			}
+		}
+
+		async void ChangeImage()
+		{
+			await CrossMedia.Current.Initialize();
+
+			if (CrossMedia.Current.IsCameraAvailable &&
+				CrossMedia.Current.IsTakePhotoSupported)
+			{
+				var source = await dialogService.ShowImageOptions();
+
+				if (source == "Cancel")
+				{
+					file = null;
+					return;
+				}
+
+				if (source == "From Camera")
+				{
+					file = await CrossMedia.Current.TakePhotoAsync(
+						new StoreCameraMediaOptions
+						{
+							Directory = "Sample",
+							Name = "test.jpg",
+							PhotoSize = PhotoSize.Small,
+						}
+					);
+				}
+				else
+				{
+					file = await CrossMedia.Current.PickPhotoAsync();
+				}
+			}
+			else
+			{
+				file = await CrossMedia.Current.PickPhotoAsync();
+			}
+
+			if (file != null)
+			{
+				ImageSource = ImageSource.FromStream(() =>
+				{
+					var stream = file.GetStream();
+					return stream;
+				});
+			}
+		}
+
 		public ICommand SaveCommand
 		{
 			get
@@ -184,17 +262,25 @@
 				return;
 			}
 
+            byte[] imageArray = null;
+			if (file != null)
+			{
+				imageArray = FilesHelper.ReadFully(file.GetStream());
+				file.Dispose();
+			}
+
 			var mainViewModel = MainViewModel.GetInstance();
 
 			var product = new Product
 			{
-                CategoryId = mainViewModel.Category.CategoryId,
+				CategoryId = mainViewModel.Category.CategoryId,
 				Description = Description,
-                IsActive = IsActive,
-                LastPurchase = LastPurchase,
-                Price = price,
-                Remarks = Remarks,
-                Stock = stock,
+				ImageArray = imageArray,
+				IsActive = IsActive,
+				LastPurchase = LastPurchase,
+				Price = price,
+				Remarks = Remarks,
+				Stock = stock,
 			};
 
 			var response = await apiService.Post(
@@ -219,7 +305,7 @@
 			var productsViewModel = ProductsViewModel.GetInstance();
 			productsViewModel.Add(product);
 
-			await navigationService.Back();
+			await navigationService.BackOnMaster();
 
 			IsRunning = false;
 			IsEnabled = true;

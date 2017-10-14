@@ -32,7 +32,9 @@
 
         public string Remarks { get; set; }
 
-        public string ImageFullPath
+		public byte[] ImageArray { get; set; }
+
+		public string ImageFullPath
         {
             get
             {
@@ -42,7 +44,7 @@
                 }
 
                 return string.Format(
-                    "http://productszulu.azurewebsites.net/{0}", 
+                    "http://productszuluapi.azurewebsites.net/{0}", 
                     Image.Substring(1));
             }
         }
@@ -97,7 +99,7 @@
 		{
             MainViewModel.GetInstance().EditProduct = 
                 new EditProductViewModel(this);
-			await navigationService.Navigate("EditProductView");
+			await navigationService.NavigateOnMaster("EditProductView");
 		}
 		#endregion
 	}

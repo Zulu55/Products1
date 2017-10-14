@@ -1,5 +1,7 @@
 ﻿namespace Products1.ViewModels
 {
+    using System;
+    using System.Collections.ObjectModel;
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
     using Models;
@@ -12,6 +14,12 @@
         #endregion
 
         #region Properties
+        public ObservableCollection<Menu> MyMenu
+        {
+            get;
+            set;
+        }
+
         public LoginViewModel Login
         {
             get;
@@ -66,6 +74,18 @@
             get;
             set;
         }
+
+        public NewCustomerViewModel NewCustomer
+        {
+            get;
+            set;
+        }
+
+        public UbicationsViewModel Ubications
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Constructors
@@ -76,6 +96,7 @@
             navigationService = new NavigationService();
 
             Login = new LoginViewModel();
+            LoadMenu();
         }
         #endregion
 
@@ -91,10 +112,39 @@
 
             return instance;
         }
-		#endregion
+        #endregion
 
-		#region Commands
-		public ICommand NewProductCommand
+        #region Methods
+        private void LoadMenu()
+        {
+            MyMenu = new ObservableCollection<Menu>();
+
+            MyMenu.Add(new Menu
+            {
+                Icon = "ic_settings",
+                PageName = "MyProfileView",
+                Title = "My Profile",
+            });
+
+            MyMenu.Add(new Menu
+            {
+                Icon = "ic_map",
+                PageName = "UbicationsView",
+                Title = "Ubications",
+            });
+
+            MyMenu.Add(new Menu
+            {
+                Icon = "ic_exit_to_app",
+                PageName = "LoginView",
+                Title = "Close sesion",
+            });
+
+        }
+        #endregion
+
+        #region Commands
+        public ICommand NewProductCommand
 		{
 			get
 			{
@@ -105,7 +155,7 @@
 		async void GoNewProduct()
 		{
             NewProduct = new NewProductViewModel();
-			await navigationService.Navigate("NewProductView");
+			await navigationService.NavigateOnMaster("NewProductView");
 		}
 		
         public ICommand NewCategoryCommand
@@ -119,7 +169,7 @@
         async void GoNewCategory()
         {
             NewCategory = new NewCategoryViewModel();
-            await navigationService.Navigate("NewCategoryView");
+            await navigationService.NavigateOnMaster("NewCategoryView");
         }
         #endregion
     }
