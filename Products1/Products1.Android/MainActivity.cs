@@ -5,7 +5,7 @@
     using Android.OS;
 
     [Activity(Label = "Products1", 
-              Icon = "@drawable/icon", 
+              Icon = "@drawable/ic_launcher", 
               Theme = "@style/MainTheme", 
               MainLauncher = true, 
               ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]

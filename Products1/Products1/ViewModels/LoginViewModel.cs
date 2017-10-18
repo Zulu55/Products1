@@ -4,6 +4,7 @@
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
     using Services;
+    using Xamarin.Forms;
 
     public class LoginViewModel : INotifyPropertyChanged 
     {
@@ -133,6 +134,19 @@
         #endregion
 
         #region Commands
+        public ICommand LoginWithFacebookCommand
+        {
+            get
+            {
+                return new RelayCommand(LoginWithFacebook);
+            }
+        }
+
+        async void LoginWithFacebook()
+        {
+            await navigationService.NavigateOnLogin("LoginFacebookView");
+        }
+
         public ICommand RegisterNewUserCommand
 		{
 			get
@@ -185,6 +199,8 @@
                 await dialogService.ShowMessage("Error", connection.Message);
                 return;
             }
+
+            var urlAPI = Application.Current.Resources["URLAPI"].ToString();
 
             var response = await apiService.GetToken(
                 "http://productszuluapi.azurewebsites.net", 

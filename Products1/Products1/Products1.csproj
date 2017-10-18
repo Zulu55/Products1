@@ -96,6 +96,10 @@
     <Compile Include="ViewModels\UbicationsViewModel.cs" />
     <Compile Include="Services\GeolocatorService.cs" />
     <Compile Include="Models\Ubication.cs" />
+    <Compile Include="Views\LoginFacebookView.xaml.cs">
+      <DependentUpon>LoginFacebookView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FacebookResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App.xaml">
@@ -133,6 +137,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\UbicationsView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\LoginFacebookView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

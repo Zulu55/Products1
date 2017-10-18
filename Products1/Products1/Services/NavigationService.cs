@@ -64,6 +64,10 @@
                     await Application.Current.MainPage.Navigation.PushAsync(
                         new NewCustomerView());
                     break;
+                case "LoginFacebookView":
+                    await Application.Current.MainPage.Navigation.PushAsync(
+                        new LoginFacebookView());
+                    break;
             }
         }
 
