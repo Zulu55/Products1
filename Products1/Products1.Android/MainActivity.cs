@@ -4,10 +4,10 @@
     using Android.Content.PM;
     using Android.OS;
 
-    [Activity(Label = "Products1", 
-              Icon = "@drawable/ic_launcher", 
-              Theme = "@style/MainTheme", 
-              MainLauncher = true, 
+    [Activity(Label = "Products1",
+              Icon = "@drawable/ic_launcher",
+              Theme = "@style/MainTheme",
+              MainLauncher = false, 
               ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : 
     global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity

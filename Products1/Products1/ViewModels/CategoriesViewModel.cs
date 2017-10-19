@@ -25,9 +25,29 @@
         List<Category> categories;
         ObservableCollection<Category> _categories;
         bool _isRefreshing;
+        string _filter; 
         #endregion
 
         #region Properties
+        public string Filter
+        {
+            get
+            {
+                return _filter;
+            }
+            set
+            {
+                if (_filter != value)
+                {
+                    _filter = value;
+                    Search();
+                    PropertyChanged?.Invoke(
+                        this,
+                        new PropertyChangedEventArgs(nameof(Filter)));
+                }
+            }
+        } 
+
         public ObservableCollection<Category> Categories
         {
             get
@@ -181,13 +201,39 @@
             }
 
             categories = (List<Category>)response.Result;
-            Categories = new ObservableCollection<Category>(
-                categories.OrderBy(c => c.Description));
+            Search();
             IsRefreshing = false;
         }
         #endregion
 
         #region Commands
+        public ICommand SearchCommand
+        {
+            get
+            {
+                return new RelayCommand(Search);
+            }
+        }
+
+        void Search()
+        {
+            IsRefreshing = true;
+
+            if (string.IsNullOrEmpty(Filter))
+            {
+                Categories = new ObservableCollection<Category>(
+                    categories.OrderBy(c => c.Description));
+            }
+            else
+            {
+                Categories = new ObservableCollection<Category>(categories
+                    .Where(c => c.Description.ToLower().Contains(Filter.ToLower()))
+                    .OrderBy(c => c.Description));
+            }
+
+            IsRefreshing = false;
+        }
+
         public ICommand RefreshCommand
         {
             get
@@ -196,6 +242,5 @@
             }
         }
         #endregion
-
     }
 }
