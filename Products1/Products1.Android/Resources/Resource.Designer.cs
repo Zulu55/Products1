@@ -26,6 +26,8 @@ namespace Products1.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.ApplicationName = global::Products1.Droid.Resource.String.ApplicationName;
+			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.Hello = global::Products1.Droid.Resource.String.Hello;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::Products1.Droid.Resource.Attribute.actionBarSize;
 		}
 		
@@ -3945,6 +3947,12 @@ namespace Products1.Droid
 		
 		public partial class String
 		{
+			
+			// aapt resource value: 0x7f07005e
+			public const int ApplicationName = 2131165278;
+			
+			// aapt resource value: 0x7f07005d
+			public const int Hello = 2131165277;
 			
 			// aapt resource value: 0x7f070034
 			public const int abc_action_bar_home_description = 2131165236;

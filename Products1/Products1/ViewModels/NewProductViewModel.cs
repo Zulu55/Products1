@@ -19,7 +19,8 @@
 
 		#region Services
 		ApiService apiService;
-		DialogService dialogService;
+        DataService dataService;
+        DialogService dialogService;
 		NavigationService navigationService;
 		#endregion
 
@@ -132,6 +133,7 @@
 		public NewProductViewModel()
 		{
 			apiService = new ApiService();
+            dataService = new DataService();
 			dialogService = new DialogService();
 			navigationService = new NavigationService();
 
@@ -253,55 +255,62 @@
 			IsRunning = true;
 			IsEnabled = false;
 
+            byte[] imageArray = null;
+            if (file != null)
+            {
+                imageArray = FilesHelper.ReadFully(file.GetStream());
+                file.Dispose();
+            }
+
+            var mainViewModel = MainViewModel.GetInstance();
+
+            var product = new Product
+            {
+                CategoryId = mainViewModel.Category.CategoryId,
+                Description = Description,
+                ImageArray = imageArray,
+                IsActive = IsActive,
+                LastPurchase = LastPurchase,
+                Price = price,
+                Remarks = Remarks,
+                Stock = stock,
+            };
+
 			var connection = await apiService.CheckConnection();
 			if (!connection.IsSuccess)
 			{
-				IsRunning = false;
-				IsEnabled = true;
-				await dialogService.ShowMessage("Error", connection.Message);
-				return;
+                product.PendingToSave = true;
+                dataService.Insert(product);
+                await dialogService.ShowMessage(
+                    "Message", 
+                    "The product was save on local DB don't forget to " +
+                    "upload the record when you have WiFi.");
 			}
+            else
+            {
+                var urlAPI = Application.Current.Resources["URLAPI"].ToString();
 
-            byte[] imageArray = null;
-			if (file != null)
-			{
-				imageArray = FilesHelper.ReadFully(file.GetStream());
-				file.Dispose();
-			}
+                var response = await apiService.Post(
+                    urlAPI,
+                    "/api",
+                    "/Products",
+                    mainViewModel.Token.TokenType,
+                    mainViewModel.Token.AccessToken,
+                    product);
 
-			var mainViewModel = MainViewModel.GetInstance();
+                if (!response.IsSuccess)
+                {
+                    IsRunning = false;
+                    IsEnabled = true;
+                    await dialogService.ShowMessage(
+                        "Error",
+                        response.Message);
+                    return;
+                }
 
-			var product = new Product
-			{
-				CategoryId = mainViewModel.Category.CategoryId,
-				Description = Description,
-				ImageArray = imageArray,
-				IsActive = IsActive,
-				LastPurchase = LastPurchase,
-				Price = price,
-				Remarks = Remarks,
-				Stock = stock,
-			};
+                product = (Product)response.Result;
+            }
 
-			var response = await apiService.Post(
-				"http://productszuluapi.azurewebsites.net",
-				"/api",
-				"/Products",
-				mainViewModel.Token.TokenType,
-				mainViewModel.Token.AccessToken,
-				product);
-
-			if (!response.IsSuccess)
-			{
-				IsRunning = false;
-				IsEnabled = true;
-				await dialogService.ShowMessage(
-					"Error",
-					response.Message);
-				return;
-			}
-
-			product = (Product)response.Result;
 			var productsViewModel = ProductsViewModel.GetInstance();
 			productsViewModel.Add(product);
 

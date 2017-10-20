@@ -100,6 +100,9 @@
       <DependentUpon>LoginFacebookView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\FacebookResponse.cs" />
+    <Compile Include="Interfaces \IConfig.cs" />
+    <Compile Include="Data\DataAccess.cs" />
+    <Compile Include="Services\DataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App.xaml">
@@ -195,6 +198,12 @@
     <Reference Include="Plugin.Geolocator">
       <HintPath>..\..\packages\Xam.Plugin.Geolocator.4.1.1\lib\netstandard1.0\Plugin.Geolocator.dll</HintPath>
     </Reference>
+    <Reference Include="SQLite.Net">
+      <HintPath>..\..\packages\SQLite.Net-PCL.3.1.1\lib\portable-win8+net45+wp8+wpa81+MonoAndroid1+MonoTouch1\SQLite.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLiteNetExtensions">
+      <HintPath>..\..\packages\SQLiteNetExtensions.1.3.0\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\SQLiteNetExtensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -206,6 +215,8 @@
     <Folder Include="Services\" />
     <Folder Include="Models\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Interfaces \" />
+    <Folder Include="Data\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

@@ -135,6 +135,13 @@
 
             MyMenu.Add(new Menu
             {
+                Icon = "ic_map",
+                PageName = "SyncView",
+                Title = "Sync Offline Operations",
+            });
+
+            MyMenu.Add(new Menu
+            {
                 Icon = "ic_exit_to_app",
                 PageName = "LoginView",
                 Title = "Close sesion",

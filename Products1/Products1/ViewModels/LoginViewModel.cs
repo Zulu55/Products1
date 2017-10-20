@@ -14,6 +14,7 @@
 
         #region Services
         ApiService apiService;
+        DataService dataService;
         DialogService dialogService;
         NavigationService navigationService;
         #endregion
@@ -122,11 +123,9 @@
         public LoginViewModel()
         {
             apiService = new ApiService();
+            dataService = new DataService();
             dialogService = new DialogService();
             navigationService = new NavigationService();
-
-            Email = "jzuluaga55@gmail.com";
-            Password = "123456";
 
             IsEnabled = true;
             IsToggled = true;
@@ -203,7 +202,7 @@
             var urlAPI = Application.Current.Resources["URLAPI"].ToString();
 
             var response = await apiService.GetToken(
-                "http://productszuluapi.azurewebsites.net", 
+                urlAPI, 
                 Email, 
                 Password);
 
@@ -228,6 +227,9 @@
                 Password = null;
                 return;
             }
+
+            response.IsRemembered = IsToggled;
+            dataService.DeleteAllAndInsert(response);
 
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Token = response;

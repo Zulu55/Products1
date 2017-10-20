@@ -4,7 +4,9 @@
 	using System.Windows.Input;
 	using GalaSoft.MvvmLight.Command;
 	using Services;
-	using ViewModels;
+    using SQLite.Net.Attributes;
+    using SQLiteNetExtensions.Attributes;
+    using ViewModels;
 
 	public class Product
     {
@@ -14,11 +16,16 @@
 		#endregion
 
 		#region Properties
-		public int ProductId { get; set; }
+        [PrimaryKey, AutoIncrement]
+        public int ProductId { get; set; }
 
-		public int CategoryId { get; set; }
+        [ForeignKey(typeof(Category))]
+        public int CategoryId { get; set; }
 
-		public string Description { get; set; }
+        [ManyToOne]
+        public Category Category { get; set; }
+
+        public string Description { get; set; }
 
         public string Image { get; set; }
 
@@ -34,7 +41,13 @@
 
 		public byte[] ImageArray { get; set; }
 
-		public string ImageFullPath
+        public bool PendingToSave
+        {
+            get;
+            set;
+        }
+
+        public string ImageFullPath
         {
             get
             {

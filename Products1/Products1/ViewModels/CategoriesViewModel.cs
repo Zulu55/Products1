@@ -1,5 +1,6 @@
 ﻿namespace Products1.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
@@ -9,6 +10,7 @@
     using GalaSoft.MvvmLight.Command;
     using Models;
     using Services;
+    using Xamarin.Forms;
 
     public class CategoriesViewModel : INotifyPropertyChanged
     {
@@ -18,6 +20,7 @@
 
         #region Services
         ApiService apiService;
+        DataService dataService;
         DialogService dialogService;
         #endregion
 
@@ -91,6 +94,7 @@
             instance = this;
 
             apiService = new ApiService();
+            dataService = new DataService();
             dialogService = new DialogService();
 
             LoadCategories();
@@ -177,32 +181,52 @@
             var connection = await apiService.CheckConnection();
             if (!connection.IsSuccess)
             {
-                await dialogService.ShowMessage(
-                    "Error",
-                    connection.Message);
-                return;
+                categories = dataService.Get<Category>(true);
+                if (categories.Count == 0)
+                {
+                    await dialogService.ShowMessage(
+                        "Error",
+                        "Dear user, YAPE");
+                    return;
+                }
             }
-
-            var mainViewModel = MainViewModel.GetInstance();
-
-            var response = await apiService.GetList<Category>(
-                "http://productszuluapi.azurewebsites.net",
-                "/api", 
-                "/Categories", 
-                mainViewModel.Token.TokenType, 
-                mainViewModel.Token.AccessToken);
-
-            if (!response.IsSuccess)
+            else
             {
-                await dialogService.ShowMessage(
-                    "Error",
-                    response.Message);
-                return;
+                var mainViewModel = MainViewModel.GetInstance();
+
+                var urlAPI = Application.Current.Resources["URLAPI"].ToString();
+
+                var response = await apiService.GetList<Category>(
+                    urlAPI,
+                    "/api",
+                    "/Categories",
+                    mainViewModel.Token.TokenType,
+                    mainViewModel.Token.AccessToken);
+
+                if (!response.IsSuccess)
+                {
+                    await dialogService.ShowMessage(
+                        "Error",
+                        response.Message);
+                    return;
+                }
+
+                categories = (List<Category>)response.Result;
+                SaveCategoriesOnDB();
             }
 
-            categories = (List<Category>)response.Result;
             Search();
             IsRefreshing = false;
+        }
+
+        void SaveCategoriesOnDB()
+        {
+            dataService.DeleteAll<Category>();
+            foreach (var category in categories)
+            {
+                dataService.Insert(category);
+                dataService.Save(category.Products);
+            }
         }
         #endregion
 
