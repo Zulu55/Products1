@@ -86,6 +86,12 @@
             get;
             set;
         }
+
+        public SyncViewModel Sync
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Constructors
@@ -135,7 +141,7 @@
 
             MyMenu.Add(new Menu
             {
-                Icon = "ic_map",
+                Icon = "ic_sync",
                 PageName = "SyncView",
                 Title = "Sync Offline Operations",
             });

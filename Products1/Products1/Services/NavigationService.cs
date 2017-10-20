@@ -53,6 +53,10 @@
                     await App.Navigator.PushAsync(
                         new UbicationsView());
                     break;
+                case "SyncView":
+                    await App.Navigator.PushAsync(
+                        new SyncView());
+                    break;
             }
         }
 

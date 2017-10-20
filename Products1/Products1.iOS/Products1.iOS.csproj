@@ -114,6 +114,7 @@
     <BundleResource Include="Resources\ic_map.png" />
     <BundleResource Include="Resources\ic_settings.png" />
     <BundleResource Include="Resources\Splash1536.png" />
+    <BundleResource Include="Resources\ic_sync.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
