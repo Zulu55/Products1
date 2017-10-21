@@ -48,16 +48,19 @@
 
             if (userASP == null)
             {
-                return BadRequest("Incorrect call");
+                return NotFound();
             }
 
-            var response = await userManager.ChangePasswordAsync(userASP.Id, currentPassword, newPassword);
+            var response = await userManager.ChangePasswordAsync(
+                userASP.Id, 
+                currentPassword, 
+                newPassword);
             if (!response.Succeeded)
             {
                 return BadRequest(response.Errors.FirstOrDefault());
             }
 
-            return Ok("ok");
+            return Ok(true);
         }
 
         [HttpPost]
