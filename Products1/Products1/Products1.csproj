@@ -107,6 +107,16 @@
       <DependentUpon>SyncView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\SyncViewModel.cs" />
+    <Compile Include="Models\ChangePasswordRequest.cs" />
+    <Compile Include="Views\MyProfileView.xaml.cs">
+      <DependentUpon>MyProfileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\MyProfileViewModel.cs" />
+    <Compile Include="Views\PasswordRecoveryView.xaml.cs">
+      <DependentUpon>PasswordRecoveryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\PasswordRecoveryViewModel.cs" />
+    <Compile Include="Models\UserRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App.xaml">
@@ -150,6 +160,12 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\SyncView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\MyProfileView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\PasswordRecoveryView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

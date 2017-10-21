@@ -92,6 +92,18 @@
             get;
             set;
         }
+
+        public MyProfileViewModel MyProfile
+        {
+            get;
+            set;
+        }
+
+        public PasswordRecoveryViewModel PasswordRecovery
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Constructors

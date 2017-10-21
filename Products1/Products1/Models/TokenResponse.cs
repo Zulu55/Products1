@@ -36,6 +36,12 @@
             get;
             set;
         }
+
+        public String Password 
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region Methods

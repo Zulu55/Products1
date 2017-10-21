@@ -57,6 +57,11 @@
                     MainViewModel.GetInstance().Sync = new SyncViewModel();
                     await navigationService.NavigateOnMaster(PageName);
                     break;
+                case "MyProfileView":
+                    MainViewModel.GetInstance().MyProfile = 
+                        new MyProfileViewModel();
+                    await navigationService.NavigateOnMaster(PageName);
+                    break;
             }
         }
         #endregion
