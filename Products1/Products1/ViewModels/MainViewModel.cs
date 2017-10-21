@@ -4,8 +4,10 @@
     using System.Collections.ObjectModel;
     using System.Windows.Input;
     using GalaSoft.MvvmLight.Command;
+    using Interfaces;
     using Models;
     using Services;
+    using Xamarin.Forms;
 
     public class MainViewModel
     {
@@ -133,7 +135,13 @@
         #endregion
 
         #region Methods
-        private void LoadMenu()
+        public void RegisterDevice()
+        {
+            var register = DependencyService.Get<IRegisterDevice>();
+            register.RegisterDevice();
+        }
+
+        void LoadMenu()
         {
             MyMenu = new ObservableCollection<Menu>();
 

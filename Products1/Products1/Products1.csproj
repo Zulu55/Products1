@@ -117,6 +117,7 @@
     </Compile>
     <Compile Include="ViewModels\PasswordRecoveryViewModel.cs" />
     <Compile Include="Models\UserRequest.cs" />
+    <Compile Include="Interfaces \IRegisterDevice.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App.xaml">

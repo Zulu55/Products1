@@ -257,11 +257,12 @@
 				return;
 			}
 
-			var mainViewModel = MainViewModel.GetInstance();
-			mainViewModel.Token = response2;
-			mainViewModel.Categories = new CategoriesViewModel();
+            var mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.Token = response2;
+            mainViewModel.RegisterDevice();
+            mainViewModel.Categories = new CategoriesViewModel();
             await navigationService.BackOnLogin();
-			navigationService.SetMainPage("MasterView");
+            navigationService.SetMainPage("MasterView");
 
 			IsRunning = false;
 			IsEnabled = true;

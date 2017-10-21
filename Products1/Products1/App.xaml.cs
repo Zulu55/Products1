@@ -47,6 +47,7 @@
             {
                 var mainViewModel = MainViewModel.GetInstance();
                 mainViewModel.Token = token;
+                mainViewModel.RegisterDevice();
                 mainViewModel.Categories = new CategoriesViewModel();
                 navigationService.SetMainPage("MasterView");
             }
@@ -118,6 +119,7 @@
 
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Token = token;
+            mainViewModel.RegisterDevice();
             mainViewModel.Categories = new CategoriesViewModel();
             Current.MainPage = new MasterView();
         }

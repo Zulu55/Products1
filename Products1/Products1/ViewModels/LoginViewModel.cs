@@ -250,6 +250,7 @@
 
             var mainViewModel = MainViewModel.GetInstance();
             mainViewModel.Token = response;
+            mainViewModel.RegisterDevice();
             mainViewModel.Categories = new CategoriesViewModel();
             navigationService.SetMainPage("MasterView");
 
